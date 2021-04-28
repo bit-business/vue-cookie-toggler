@@ -32,7 +32,7 @@ import {
 const OPTIONS = {
   querySelector: 'script[data-cookie]',
   typeSelector: 'text/plain',
-  categorySelector: 'data-category',
+  categorySelector: 'data-name',
   validation: {
     // for developers
     wrongType:

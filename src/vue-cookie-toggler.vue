@@ -1,7 +1,12 @@
 <template>
   <div>
-    <gdpr-modal v-if="!isSettings" :toggle-modal="toggleModal">
-      <template #header> {{ title }} </template>
+    <gdpr-modal
+      v-if="!isSettings"
+      :toggle-modal="toggleModal"
+    >
+      <template #header>
+        {{ title }}
+      </template>
 
       <slot />
 
@@ -34,10 +39,17 @@
       </template>
     </gdpr-modal>
 
-    <gdpr-modal v-else :toggle-modal="toggleModal">
+    <gdpr-modal
+      v-else
+      :toggle-modal="toggleModal"
+    >
       <template #header>
-        <template v-if="settingsTitle">{{ settingsTitle }}</template>
-        <template v-else>{{ title }}</template>
+        <template v-if="settingsTitle">
+          {{ settingsTitle }}
+        </template>
+        <template v-else>
+          {{ title }}
+        </template>
       </template>
 
       <slot name="settingsContent" />

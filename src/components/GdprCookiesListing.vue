@@ -17,11 +17,14 @@
             class="cookie-item__heading"
             role="tab"
           >
-            <h4 v-collapse-toggle class="cookie-item__title">
+            <h4
+              v-collapse-toggle
+              class="cookie-item__title"
+            >
               <img
                 class="cookie-item__title-img"
                 src="data:image/svg+xml;utf8,<svg viewBox='0 0 140 140' width='10' height='10' xmlns='http://www.w3.org/2000/svg'><g><path d='m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z' fill='7A8990'/></g></svg>"
-              />
+              >
               {{ cookieGroup.name }}
             </h4>
             <switches
@@ -31,13 +34,64 @@
               color="blue"
               :disabled="isRequired(cookieGroup)"
               @input="toggleCookieGroupConsent(cookieGroup)"
-            ></switches>
+            />
           </div>
-          <div v-collapse-content class="cookie-item__body">
+          <div
+            v-collapse-content
+            class="cookie-item__body"
+          >
             <div
               class="cookie-item__description"
               v-html="cookieGroup.description"
-            ></div>
+            />
+            <div v-if="getServices(cookieGroup)">
+              <v-collapse-group
+                v-if="getServices(cookieGroup)"
+                :only-one-active="true"
+              >
+                <v-collapse-wrapper
+                  v-for="service in getServices(cookieGroup)"
+                  :key="service.name"
+                  @onStatusChange="toggleActiveClass"
+                >
+                  <div class="cookie-item">
+                    <div
+                      :id="`cookieHeading_${service.name}`"
+                      class="cookie-item__subheading"
+                      role="tab"
+                    >
+                      <h5
+                        v-collapse-toggle
+                        class="cookie-item__title"
+                      >
+                        <img
+                          class="cookie-item__title-img"
+                          src="data:image/svg+xml;utf8,<svg viewBox='0 0 140 140' width='10' height='10' xmlns='http://www.w3.org/2000/svg'><g><path d='m121.3,34.6c-1.6-1.6-4.2-1.6-5.8,0l-51,51.1-51.1-51.1c-1.6-1.6-4.2-1.6-5.8,0-1.6,1.6-1.6,4.2 0,5.8l53.9,53.9c0.8,0.8 1.8,1.2 2.9,1.2 1,0 2.1-0.4 2.9-1.2l53.9-53.9c1.7-1.6 1.7-4.2 0.1-5.8z' fill='7A8990'/></g></svg>"
+                        >
+                        {{ service.name }}
+                      </h5>
+                      <switches
+                        :emit-on-mount="false"
+                        :value="isActive(cookieGroup)"
+                        theme="custom"
+                        color="blue"
+                        :disabled="isRequired(cookieGroup)"
+                        @input="toggleCookieGroupConsent(cookieGroup)"
+                      />
+                    </div>
+                    <div
+                      v-collapse-content
+                      class="cookie-item__body"
+                    >
+                      <div
+                        class="cookie-item__description"
+                        v-html="service.description"
+                      />
+                    </div>
+                  </div>
+                </v-collapse-wrapper>
+              </v-collapse-group>
+            </div>
           </div>
         </div>
       </v-collapse-wrapper>
@@ -46,7 +100,7 @@
 </template>
 
 <script>
-import { get } from 'lodash';
+import {get} from 'lodash';
 import Switches from 'vue-switches';
 
 export default {
@@ -81,10 +135,14 @@ export default {
     toggleActiveClass(e) {
       if (true === e.status) {
         return (e.vm.nodes.toggle.className =
-          'cookie-item__title cookie-item__active');
+            'cookie-item__title cookie-item__active');
       }
       return (e.vm.nodes.toggle.className = 'cookie-item__title');
     },
+
+    getServices(cookieGroup) {
+      return get(cookieGroup, 'services', false);
+    }
   },
 };
 </script>
@@ -110,11 +168,13 @@ export default {
 .cookies-consent_list {
   margin-top: 25px;
 }
+
 .cookie-item {
   border-radius: 3px;
   background-color: #f8f8f8;
   margin-bottom: 10px;
 }
+
 .cookie-item__heading {
   border: none;
   padding: 0 15px;
@@ -123,14 +183,28 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 15px;
 }
+
+.cookie-item__subheading {
+  border: none;
+  padding: 0 15px;
+  border-radius: 3px;
+  background-color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
 .cookie-item__title {
   color: #142f47;
   font-family: sans-serif;
-  font-size: 15px;
+
   font-weight: bold;
   cursor: pointer;
 }
+
 .cookie-item__title-img {
   margin-right: 5px;
 }
@@ -146,6 +220,7 @@ export default {
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
 }
+
 .cookie-item__description {
   padding: 16px;
   color: #7a8990;
@@ -153,31 +228,66 @@ export default {
   font-size: 12px;
   line-height: 20px;
 }
+
 label.vue-switcher {
   margin-bottom: 0 !important;
 }
+
 .cookie-item__heading
-  >>> .vue-switcher-theme--custom.vue-switcher-color--blue
-  div {
+>>> .vue-switcher-theme--custom.vue-switcher-color--blue
+div {
   background-color: rgba(36, 130, 217, 0.38);
 }
+
 .cookie-item__heading
-  >>> .vue-switcher-theme--custom.vue-switcher-color--blue.vue-switcher--unchecked
-  div {
+>>> .vue-switcher-theme--custom.vue-switcher-color--blue.vue-switcher--unchecked
+div {
   background-color: rgba(0, 0, 0, 0.38);
 }
+
 .cookie-item__heading
-  >>> .vue-switcher-theme--custom.vue-switcher-color--blue
-  div:after {
+>>> .vue-switcher-theme--custom.vue-switcher-color--blue
+div:after {
   background-color: #2482d9;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14),
-    0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 }
+
 .cookie-item__heading
-  >>> .vue-switcher-theme--custom.vue-switcher-color--blue.vue-switcher--unchecked
-  div:after {
+>>> .vue-switcher-theme--custom.vue-switcher-color--blue.vue-switcher--unchecked
+div:after {
   background-color: #ffffff;
   box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14),
-    0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+  0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+}
+
+
+
+.cookie-item__subheading
+>>> .vue-switcher-theme--custom.vue-switcher-color--blue
+div {
+  background-color: rgba(36, 130, 217, 0.38);
+}
+
+.cookie-item__subheading
+>>> .vue-switcher-theme--custom.vue-switcher-color--blue.vue-switcher--unchecked
+div {
+  background-color: rgba(0, 0, 0, 0.38);
+}
+
+.cookie-item__subheading
+>>> .vue-switcher-theme--custom.vue-switcher-color--blue
+div:after {
+  background-color: #2482d9;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+  0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
+}
+
+.cookie-item__subheading
+>>> .vue-switcher-theme--custom.vue-switcher-color--blue.vue-switcher--unchecked
+div:after {
+  background-color: #ffffff;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.14),
+  0 2px 1px -1px rgba(0, 0, 0, 0.12), 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 }
 </style>

@@ -1,5 +1,8 @@
 <template>
-  <div v-if="!isStorageSupported()" class="cookie-enable__message">
+  <div
+    v-if="!isStorageSupported()"
+    class="cookie-enable__message"
+  >
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="16"

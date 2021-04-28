@@ -21,15 +21,15 @@
             id="cookieConsentModalLabel"
             class="cookie-consent_modal__header-title"
           >
-            <slot name="header"></slot>
+            <slot name="header" />
           </h4>
-          <hr />
+          <hr>
         </div>
         <div class="cookieConsent-modal__body">
-          <slot></slot>
+          <slot />
         </div>
         <div class="cookie-consent_modal__footer">
-          <slot name="footer"></slot>
+          <slot name="footer" />
         </div>
       </div>
     </div>
