@@ -1,23 +1,18 @@
 {
   "name": "vue-cookie-toggler",
-  "version": "0.2.2",
-  "description": "GDPR cookies consent modal.",
-  "author": "Daniel Negoita <hello@danielnegoita.com>",
+  "version": "1.0.0",
+  "description": "cookies",
+  "author": "BitB",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danielnegoita/vue-cookie-toggler.git"
+    "url": "git+https://github.com/bit-b/vue-cookie-toggler.git"
   },
   "bugs": {
-    "url": "https://github.com/danielnegoita/vue-cookie-toggler.git/issues"
+    "url": "https://github.com/bit-b/vue-cookie-toggler.git/issues"
   },
   "keywords": [
     "vue",
-    "gdpr",
-    "modal",
-    "categorize",
-    "block",
-    "consent",
     "cookie"
   ],
   "main": "dist/vue-cookie-toggler.ssr.js",
